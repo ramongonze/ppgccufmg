@@ -212,6 +212,11 @@
 	\endgroup
 }
 
+%% Ambiente para apêndices
+\newenvironment{apendices}{
+	\appendix
+}{}
+
 %% Comando principal que desenha todos os elementos pré-textuais (capa, folha de rosto, abstract, ...)
 \newcommand{\ppgccufmg}{%
 	\pagestyle{estilopadrao} %% Define 'estilopadrao' como sendo o estilo 'global' das páginas
