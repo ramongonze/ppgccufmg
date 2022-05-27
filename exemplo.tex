@@ -1,0 +1,45 @@
+\documentclass{ppgccufmg}
+
+\usepackage[brazil]{babel}        % se o documento for em português, OU
+%\usepackage[english]{babel}      % se o documento for em inglês
+%\usepackage[latin1]{inputenc}
+\usepackage{natbib}
+
+\title{Title}
+\date{\today}
+\author{Me}
+
+\usepackage{lipsum}
+
+\begin{document}
+	\ppgccufmg
+	
+	\chapter{Introdução}
+		Exemplo de nota de rodapé \footnote{Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.}.
+		\lipsum[1-4]
+		
+		\section{Motivação}
+			\lipsum[4-5]
+			   
+			\subsection{Sub-motivação}
+				\lipsum[6-7]
+			\subsection{Mais uma sub-motivação}
+				\lipsum[8-9]
+				
+	\chapter{Desenvolvimento}
+		\lipsum[1-5]
+
+		\section{Usando referências}
+			Segundo \cite{horn86robot}, todo triângulo equilátero tem os lados iguais. Já segundo \cite{shashua97photometric}, todo quadrado também tem.
+			
+			Veja que o pacote \verb|natbib| permite uma série de formas diferentes para fazer referências bibliográficas. O comando padrão, \verb|\cite|, realiza a citação comum vista no parágrafo anterior. Outros comandos permitem, por exemplo, citar somente o autor --- por exemplo, citar o trabalho de	\citeauthor{samaras99coupled} --- ou colocar automaticamente a citação entre	parênteses \citep{hougen93estimation, sato99illumination2, sato99illumination1, sato01stability}.
+			
+			Os comandos usados foram, respectivamente, \verb|\citeauthor| e \verb|\citep|. Veja a documentação do \verb|natbib| na Internet para conhecer	outros comandos e exemplos de uso.
+			
+			Citações aleatórias para fazer com que as referências bibliográficas ocupem	mais de uma página: \cite{bichsel92simple, dror01statistics, guisser92new, dwork2006calibrating, sweeney2002k}.
+			
+		%% Referências
+		\bibliographystyle{plain}
+		\bibliography{referencias}
+		
+\end{document}
