@@ -12,8 +12,6 @@
 }{\end{flushleft}}
 %% ==========================================
 
-\newcommand{\removededicatoria}{true}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -45,7 +43,6 @@
 ]{geometry} %% Usado para definir tamanho das margens
 \RequirePackage{fancyhdr} %% Usado para colocar a numeração no canto superior direito da página
 \RequirePackage{pdfpages} %% Inclusão de pdfs
-\RequirePackage{tocloft} %% Modificar o sumário, lista de figuras e lista de tabelas
 \RequirePackage{xkeyval} %% Utilizar keys no comando ppgccufmg
 \RequirePackage{xstring} %% Utilizar \IfStrEq
 %% ==========================================
@@ -56,7 +53,7 @@
 \fancypagestyle{estilopadrao}[fancydefault]{
 	\fancyhf{} %% Reseta o que tem no header e footer (deixa tudo em branco)
 	\fancyhead[R]{\thepage} %% Coloca a numeração da página no canto direito do header
-	\fancyhead[L]{\rightmark} %% Coloca o nome da seção no canto esquerdo do header
+	\fancyhead[L]{\nouppercase{\rightmark}} %% Coloca o nome da seção no canto esquerdo do header
 }
 
 %% Altera o estilo plain que é o estilo padrão das páginas do início dos capítulos
@@ -93,6 +90,7 @@
 \define@key{ppgcc}{epigrafeautor}{\defepigrafeautor{#1}} %% Autor do epígrafe
 \define@key{ppgcc}{dedicatoria}{\defdedicatoria{#1}}
 \define@key{ppgcc}{agradecimentos}{\defagradecimentos{#1}}
+\define@key{ppgcc}{listascustomizadas}{\deflistascustomizadas{#1}}
 
 
 %% Definições dos parâmetros ppgcc
@@ -113,6 +111,7 @@
 \newcommand{\defepigrafeautor}[1]{\def\epigrafeautor{#1}}
 \newcommand{\defdedicatoria}[1]{\def\dedicatoria{#1}}
 \newcommand{\defagradecimentos}[1]{\def\agradecimentos{#1}}
+\newcommand{\deflistascustomizadas}[1]{\def\listascustomizadas{#1}}
 %% ==========================================
 
 %% Comandos gerais ==========================
@@ -125,12 +124,10 @@
 	}
 }
 
+%% Define o estilo do sumário, lista de figuras e lista de tabelas
 \newcommand{\tocloftpagestyle}[1]{%
 	\def\@cftpagestyle{\thispagestyle{#1}}}
 \tocloftpagestyle{empty}
-
-%% Define o estilo do nome do capítulo no header
-\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
 
 %% Definição da capa
 \renewcommand{\maketitle}{
@@ -349,7 +346,6 @@
 	\appendix
 }{}
 
-
 %% Verifica se todos os parâmetros obrigatórios foram passados
 \newcommand{\verificaobrigatorios}{
 	%% Verifica se o autor(a) foi definido
@@ -415,6 +411,7 @@
 
 %% Comando principal que desenha todos os elementos pré-textuais (capa, folha de rosto, abstract, ...)
 \newcommand{\ppgccufmg}[1]{%
+	
 	%% Executa os parâmetros passados pelo usuário
 	\setkeys{ppgcc}{#1}
 	
@@ -468,6 +465,12 @@
 	
 	\clearpage
 	
+	\ifx\listascustomizadas\undefined\else
+		\listascustomizadas*
+	\fi
+	
+	\clearpage
+	
 	%% TODO: Comando para adicionar outros elementos pré-textuais, como por exemplo lista de algoritmos, erratas, ...
 	
 	\begin{KeepFromToc}
@@ -481,6 +484,7 @@
 
 %% Comandos que serão exercutados logo após o comando \begin{document}
 \AtBeginDocument{
+	
 	\setsecnumdepth{subsection} %% Define a profundidade das seções (permite capítulo, seção e sub-seção)
 	\OnehalfSpacing %% Espaçamento de 1,5cm entre linhas
 	\setlength{\parindent}{1.25cm} %% Recuo de 1,25 cm à esquerda em parágrafos

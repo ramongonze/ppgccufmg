@@ -13,6 +13,19 @@
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{lipsum}
+\usepackage{tocloft}
+
+%% Exemplo de lista customizada ==================
+%% Para criar uma lista customizada (como Lista de Algoritmos, Lista de Exemplos) que ficará juntamente com as Lista de Figuras e Lista de Tabelas, execute os 3 comandos abaixo substituindo "algoritmos" pelo tipo de lista que estará criando. Para adicionar a lista ao documento, deverá passar o seguinte parâmetro no comando \ppgccufmg:
+%% \ppgccufmg{
+%% 		...
+%% 		listacustomizada={\listadealgoritmos}
+%% }
+\newfloat[chapter]{algoritmo}{lol}{Algoritmo}
+\newcommand{\listaalgoritmosname}{Lista de Algoritmos} %% Título da lista
+\newlistof{listadealgoritmos}{lol}{\listaalgoritmosname} %% O primeiro parâmetro é o nome da lista, e este deverá ser passado no parâmetro listacustomizada={\nomedalista}
+\newlistentry{algoritmo}{lol}{0} %% Nome do ambiente de cada algoritmo, e.g., \begin{algoritmo} ... \end{algoritmo}
+%% ===============================================
 
 \begin{document}
 	\ppgccufmg{
@@ -32,7 +45,8 @@
 		dedicatoria={dedicatoria.tex}, %% Arquivo .tex contendo a dedicatória
 		agradecimentos={agradecimentos.tex},
 		epigrafe={Truth and lie are opposite things.},
-		epigrafeautor={Unkown}
+		epigrafeautor={Unkown},
+		listascustomizadas={\listadealgoritmos}
 	}
 	
 	\chapter{Introdução}
@@ -49,6 +63,20 @@
 				
 	\chapter{Desenvolvimento}
 		\lipsum[1-4]
+		
+		\begin{algoritmo}
+			\centering
+			\framebox[.5\textwidth]{\texttt{Código, Código, Código}}
+			\caption{Este é o meu Algoritmo 1.}
+			\label{alg:algoritmo1}
+		\end{algoritmo}
+	
+		\begin{algoritmo}
+			\centering
+			\framebox[.7\textwidth]{\texttt{Mais Código, Mais Código, Mais Código}}
+			\caption{Este é o meu Algoritmo 2.}
+			\label{alg:algoritmo2}
+		\end{algoritmo}
 		
 		\begin{figure}[h]
 			\centering
