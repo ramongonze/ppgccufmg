@@ -1,6 +1,8 @@
 # Classe LaTeX ppgccufmg
 Uma classe LaTeX para dissertações, teses e propostas do Programa de Pós-Graduação em Ciência da Computação (PPGCC) da Universidade Federal de Minas Gerais (UFMG).
 
+A criação desta classe foi inspirada na classe criada por Vilar Fiuza da Camara Neto e Eduardo Freire Nakamura.
+
 # Como utilizar a classe
 
 ## Opções da classe
@@ -61,3 +63,6 @@ Para adicionar apêncices ao documento, a classe fornece o ambiente ```apendices
     \end{apendices}
 
 O comando ```\chapter{}``` define o início de um novo apêndice.
+
+# License
+[MIT](https://choosealicense.com/licenses/mit)
