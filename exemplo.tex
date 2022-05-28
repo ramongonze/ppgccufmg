@@ -13,7 +13,12 @@
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{lipsum}
-\usepackage{tocloft}
+\usepackage[
+	colorlinks=true,
+	linkcolor=blue, %% Cor dos links do sumário
+	citecolor=red, %% Cor dos links das citações      
+	urlcolor=magenta, %% Cor das urls
+]{hyperref}
 
 %% Exemplo de lista customizada ==================
 %% Para criar uma lista customizada (como Lista de Algoritmos, Lista de Exemplos) que ficará juntamente com as Lista de Figuras e Lista de Tabelas, execute os 3 comandos abaixo substituindo "algoritmos" pelo tipo de lista que estará criando. Para adicionar a lista ao documento, deverá passar o seguinte parâmetro no comando \ppgccufmg:
@@ -25,13 +30,15 @@
 \newcommand{\listaalgoritmosname}{Lista de Algoritmos} %% Título da lista
 \newlistof{listadealgoritmos}{lol}{\listaalgoritmosname} %% O primeiro parâmetro é o nome da lista, e este deverá ser passado no parâmetro listacustomizada={\nomedalista}
 \newlistentry{algoritmo}{lol}{0} %% Nome do ambiente de cada algoritmo, e.g., \begin{algoritmo} ... \end{algoritmo}
+
+%% **** Caso não haja nenhuma lista adicional, os comandos acima podem ser apagados. ****
 %% ===============================================
 
 \begin{document}
 	\ppgccufmg{
-		autor={Alan Turing},
-		titulopt={Título em Português},
-		tituloen={Title in English},
+		autor={Alan Turing}, %% Autor(a)
+		titulopt={Título em Português}, %% Título em português
+		tituloen={Title in English}, %% Título em inglês
 		cidade={Belo Horizonte},
 		ano={2022},
 		versaopt={Final}, %% Palavra que acompanhará 'Versão' na folha de rosto em português
@@ -39,7 +46,11 @@
 %		orientador={Fulano de tal}, %% Para masculino
 		orientadora={Fulana de Tal}, %% Para feminino
 %		coorientador={Ciclano}, %% Para masculino
-%		coorientadora={Ciclana}, %% Para feminino
+		coorientadora={Ciclana}, %% Para feminino
+		fichacatalografica={fichacatalografica.pdf},
+		folhadeaprovacao={folhadeaprovacao.pdf},
+		resumo={resumo.tex}, %% Resumo em português
+		abstracten={abstract.tex}, %% Abstract em inglês
 		palavraschave={Matemática, Computação.}, %% Palavras-chave do resumo
 		keywords={Math, Computing.}, %% Palavras-chave do abstract
 		dedicatoria={dedicatoria.tex}, %% Arquivo .tex contendo a dedicatória
@@ -50,7 +61,7 @@
 	}
 	
 	\chapter{Introdução}
-		Exemplo de nota de rodapé \footnote{Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.}.
+		Exemplo de nota de rodapé \footnote{Aqui está uma nota de rodapé e uma url: \url{https://dcc.ufmg.br}}.
 		\lipsum[1-4]
 		
 		\section{Motivação}

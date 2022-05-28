@@ -84,6 +84,10 @@
 \define@key{ppgcc}{orientadora}{\deforientadora{#1}}
 \define@key{ppgcc}{coorientador}{\defcoorientador{#1}}
 \define@key{ppgcc}{coorientadora}{\defcoorientadora{#1}}
+\define@key{ppgcc}{fichacatalografica}{\deffichacatalografica{#1}}
+\define@key{ppgcc}{folhadeaprovacao}{\deffolhadeaprovacao{#1}}
+\define@key{ppgcc}{resumo}{\defresumo{#1}}
+\define@key{ppgcc}{abstracten}{\defabstracten{#1}}
 \define@key{ppgcc}{palavraschave}{\defpalavraschave{#1}} %% Palavras-chave do resumo em português
 \define@key{ppgcc}{keywords}{\defkeywords{#1}} %% Palavras-chave do abstract em inglês
 \define@key{ppgcc}{epigrafe}{\defepigrafe{#1}} %% Texto do epígrafe
@@ -105,6 +109,10 @@
 \newcommand{\deforientadora}[1]{\def\orientadora{#1}}
 \newcommand{\defcoorientador}[1]{\def\coorientador{#1}}
 \newcommand{\defcoorientadora}[1]{\def\coorientadora{#1}}
+\newcommand{\deffichacatalografica}[1]{\def\fichacatalografica{#1}}
+\newcommand{\deffolhadeaprovacao}[1]{\def\folhadeaprovacao{#1}}
+\newcommand{\defresumo}[1]{\def\resumo{#1}}
+\newcommand{\defabstracten}[1]{\def\abstracten{#1}}
 \newcommand{\defpalavraschave}[1]{\def\palavraschave{#1}}
 \newcommand{\defkeywords}[1]{\def\keywords{#1}}
 \newcommand{\defepigrafe}[1]{\def\epigrafe{#1}}
@@ -269,12 +277,12 @@
 }
 
 %% Ficha catalográfica. O parâmetro deve ser o nome do arquivo com a extensão .pdf
-\newcommand{\fichacatalografica}[1]{
+\newcommand{\fazfichacatalografica}[1]{
 	\includepdf[pages=-]{#1}
 }
 
 %% Folha de aprovação. O parâmetro deve ser o nome do arquivo com a extensão .pdf
-\newcommand{\folhadeaprovacao}[1]{
+\newcommand{\fazfolhadeaprovacao}[1]{
 	\includepdf[pages=-]{#1}
 }
 
@@ -316,7 +324,7 @@
 }
 
 %% Resumo. O primeiro parâmetro deve ser o nome do arquivo com a extensão .tex contendo o resumo, e o segundo parâmetro uma lista com as palavras-chave.
-\newcommand{\resumo}[1]{
+\newcommand{\fazresumo}[1]{
 	\begingroup
 		\resetaplain
 		\chapter*{Resumo}
@@ -329,7 +337,7 @@
 }
 
 %% Abstract. O primeiro parâmetro deve ser o nome do arquivo com a extensão .tex contendo o abstract, e o segundo parâmetro uma lista com as palavras-chave.
-\renewcommand{\abstract}[1]{
+\newcommand{\fazabstracten}[1]{
 	\begingroup
 		\resetaplain
 		\chapter*{Abstract}
@@ -350,37 +358,47 @@
 \newcommand{\verificaobrigatorios}{
 	%% Verifica se o autor(a) foi definido
 	\ifx\autor\undefined
-		\ClassError{ppgccufmg}{Autor(a) não definido.}{Defina o autor(a).}
+		\ClassError{ppgccufmg}{Autor(a) não definido}{Defina o autor(a)}
 	\fi
 	
 	%% Verifica se o título em português foi definido
 	\ifx\titulopt\undefined
-		\ClassError{ppgccufmg}{Título em português não definido.}{Defina o título em português.}
+		\ClassError{ppgccufmg}{Título em português não definido}{Defina o título em português}
 	\fi
 	
 	%% Verifica se a cidade foi definida
 	\ifx\cidade\undefined
-		\ClassError{ppgccufmg}{Cidade não definida.}{Defina a cidade.}
+		\ClassError{ppgccufmg}{Cidade não definida}{Defina a cidade}
 	\fi
 	
 	%% Verifica se a cidade foi definida
 	\ifx\ano\undefined
-		\ClassError{ppgccufmg}{Ano não definido.}{Defina o ano.}
+		\ClassError{ppgccufmg}{Ano não definido}{Defina o ano}
 	\fi
 	
 	%% Verifica se a versão em português foi definida
 	\ifx\versaopt\undefined
-		\ClassError{ppgccufmg}{Versão em português não definida.}{Defina a versão em português.}
+		\ClassError{ppgccufmg}{Versão em português não definida}{Defina a versão em português}
 	\fi
+	
+	%% Verifica se o resumo em português foi passado
+	\ifx\resumo\undefined
+		\ClassError{ppgccufmg}{Resumo em português não encontrado}{Indique o arquivo .tex contendo o resumo em português}
+	\fi
+	
+	%% Verifica se o abstract em inglês foi passado
+	\ifx\abstracten\undefined
+		\ClassError{ppgccufmg}{Abstract em inglês não encontrado}{Indique o arquivo .tex contendo o abstract em inglês}
+	\fi	
 	
 	%% Verifica se as palavras-chave em português foram definidas
 	\ifx\palavraschave\undefined
-		\ClassError{ppgccufmg}{Palavras-chave do resumo em português não definidas.}{Defina as palavras-chave.}
+		\ClassError{ppgccufmg}{Palavras-chave do resumo em português não definidas}{Defina as palavras-chave}
 	\fi
 	
 	%% Verifica se as palavras-chave em português foram definidas
 	\ifx\keywords\undefined
-		\ClassError{ppgccufmg}{Palavras-chave do abstract em inglês não definidas.}{Defina as palavras-chave.}
+		\ClassError{ppgccufmg}{Palavras-chave do abstract em inglês não definidas}{Defina as palavras-chave}
 	\fi
 	
 	%% Se o usuário definiu o idioma como sendo inglês ---------
@@ -388,14 +406,14 @@
 	%% Verifica se o título em inglẽs foi passado
 	\ifx\idiomaen\undefined\else
 		\ifx\tituloen\undefined
-			\ClassError{ppgccufmg}{Título em inglês não definido.}{Defina o título em inglês.}
+			\ClassError{ppgccufmg}{Título em inglês não definido}{Defina o título em inglês}
 		\fi
 	\fi
 	
 	%% Verifica se a versão do documento em inglẽs foi passada
 	\ifx\idiomaen\undefined\else
 		\ifx\versaoen\undefined
-			\ClassError{ppgccufmg}{Versão em inglês não definida.}{Defina a versão em inglês.}
+			\ClassError{ppgccufmg}{Versão em inglês não definida}{Defina a versão em inglês}
 		\fi
 	\fi
 	
@@ -404,7 +422,7 @@
 	%% Verificar se algum orientador(a) foi definido
 	\ifx\orientador\undefined
 		\ifx\orientadora\undefined
-			\ClassError{ppgccufmg}{Orientador(a) não definido}{Defina o(a) orientador(a).}
+			\ClassError{ppgccufmg}{Orientador(a) não definido}{Defina o(a) orientador(a)}
 		\fi
 	\fi
 }
@@ -431,9 +449,13 @@
 		\folhaderosto{en} %% Folha de rosto em inglês
 	\fi
 	
-	\fichacatalografica{fichacatalografica.pdf}
+	\ifx\fichacatalografica\undefined\else
+		\fazfichacatalografica{\fichacatalografica}
+	\fi
 	
-	\folhadeaprovacao{folhadeaprovacao.pdf}
+	\ifx\folhadeaprovacao\undefined\else
+		\fazfolhadeaprovacao{\folhadeaprovacao}
+	\fi
 	
 	\ifx\dedicatoria\undefined\else
 		\fazdedicatoria{\dedicatoria}
@@ -450,9 +472,9 @@
 		\fazepigrafe{\epigrafe}{\epigrafeautor}
 	\fi
 	
-	\resumo{resumo.tex}
+	\fazresumo{\resumo}
 	
-	\abstract{abstract.tex}
+	\fazabstracten{\abstracten}
 	
 	\begingroup
 	\resetaplain
