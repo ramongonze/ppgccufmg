@@ -4,9 +4,10 @@ Uma classe LaTeX para dissertações, teses e propostas do Programa de Pós-Grad
 A criação desta classe foi inspirada na classe criada por Vilar Fiuza da Camara Neto e Eduardo Freire Nakamura.
 
 # Como utilizar a classe
+Recomenda-se fazer uma cópia da pasta ```exemplo``` e realizar as modificações necessárias. Entretando, caso o usuário prefira criar um novo documento vazio e queria utilizar a classe, o arquivo ```ppgccufmg.cls``` deve ser copiado para o mesmo diretório que o arquivo ```.tex``` principal.
 
 ## Opções da classe
-Recomenda-se fazer uma cópia da pasta ```exemplo``` e realizar as modificações necessárias. Entretando, caso o usuário prefira criar um novo documento vazio e queria utilizar a classe, o arquivo ```ppgccufmg.cls``` deve ser copiado para o mesmo diretório que o arquivo ```.tex``` principal. Para se utilizar a classe, deve-se declarar o tipo do documento com o comando
+ Para se utilizar a classe, deve-se declarar o tipo do documento com o comando
 
     \documentclass[<opções>]{ppgccufmg}
 
