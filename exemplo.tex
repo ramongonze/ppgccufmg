@@ -1,18 +1,39 @@
-\documentclass{ppgccufmg}
+\documentclass[
+	msc, %% Para dissertações de mestrado, OU
+%	mscproposta, %% Para propostas de dissertação de mestrado, OU
+%	phd, %% Para teses de doutorado, OU
+%	phdproposta, %% Para propostas de tese de doutorado
+%	portugues %% Para documentos em português, OU
+	english %% Para documentos em inglês
+]{ppgccufmg}
 
-\usepackage[brazil]{babel}        % se o documento for em português, OU
-%\usepackage[english]{babel}      % se o documento for em inglês
+%\usepackage[brazil]{babel} %% se o documento for em português, OU
+\usepackage[english]{babel} %% se o documento for em inglês
 %\usepackage[latin1]{inputenc}
 \usepackage{natbib}
-
-\title{Title}
-\date{\today}
-\author{Me}
-
+\usepackage{xcolor}
 \usepackage{lipsum}
 
 \begin{document}
-	\ppgccufmg
+	\ppgccufmg{
+		autor={Alan Turing},
+		titulopt={Título em Português},
+		tituloen={Title in English},
+		cidade={Belo Horizonte},
+		ano={2022},
+		versaopt={Final}, %% Palavra que acompanhará 'Versão' na folha de rosto em português
+		versaoen={Final}, %% Palavra que acompanhará 'Version' na folha de rosto em inglẽs
+%		orientador={Fulano de tal}, %% Para masculino
+		orientadora={Fulana de Tal}, %% Para feminino
+%		coorientador={Ciclano}, %% Para masculino
+%		coorientadora={Ciclana}, %% Para feminino
+		palavraschave={Matemática, Computação.}, %% Palavras-chave do resumo
+		keywords={Math, Computing.}, %% Palavras-chave do abstract
+		dedicatoria={dedicatoria.tex}, %% Arquivo .tex contendo a dedicatória
+		agradecimentos={agradecimentos.tex},
+		epigrafe={Truth and lie are opposite things.},
+		epigrafeautor={Unkown}
+	}
 	
 	\chapter{Introdução}
 		Exemplo de nota de rodapé \footnote{Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.}.
@@ -27,14 +48,41 @@
 				\lipsum[8-9]
 				
 	\chapter{Desenvolvimento}
-		\lipsum[1-5]
+		\lipsum[1-4]
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=\textwidth]{img/dcc.jpg}
+			\caption{Prédio do DCC em 2016.}
+			\label{fig:exemplo}
+		\end{figure}
+	
+		\lipsum[5]
+		
+		\begin{table}[h]
+			\centering
+			\begin{tabular}{c|ccccccccl}
+				Natural & \multicolumn{9}{c}{Real}   \\ \hline
+				1 & 0.  & {\color{red} 2}  & 3   & 6   & 4   & 3   & 6   & 7   & $\ldots$ \\
+				2  & 0.  & 0   & {\color{red} 9}  & 8   & 4   & 7   & 3   & 2   & $\ldots$ \\
+				3  & 0.  & 1   & 9   & {\color{red} 3}  & 2   & 1   & 4   & 0   & $\ldots$ \\
+				4  & 0.  & 8   & 4   & 3   & {\color{red} 2}  & 7   & 9   & 2   & $\ldots$ \\
+				5  & 0.  & 0   & 1   & 2   & 9   & {\color{red} 3}  & 4   & 8   & $\ldots$ \\
+				6  & 0.  & 2   & 8   & 2   & 6   & 5   & {\color{red} 8}  & 3   & $\ldots$ \\
+				7  & 0.  & 0   & 2   & 1   & 5   & 3   & 7   & {\color{red} 4}  & $\ldots$ \\
+				$\vdots$ & $\vdots$  & $\vdots$  & $\vdots$  & $\vdots$  & $\vdots$  & $\vdots$  & $\vdots$  & $\vdots$  & $\ddots$ \\ \hline
+				\multicolumn{1}{l|}{} & \multicolumn{1}{l}{0.} & \multicolumn{1}{l}{{\color{red} 2}} & \multicolumn{1}{l}{{\color{red} 9}} & \multicolumn{1}{l}{{\color{red} 3}} & \multicolumn{1}{l}{{\color{red} 2}} & \multicolumn{1}{l}{{\color{red} 3}} & \multicolumn{1}{l}{{\color{red} 8}} & \multicolumn{1}{l}{{\color{red} 4}} & $\ldots$
+			\end{tabular}
+			\caption{Cantor: Existem infinitos diferentes!}
+			\label{tab:exemplo}
+		\end{table}
 
 		\section{Usando referências}
 			Segundo \cite{horn86robot}, todo triângulo equilátero tem os lados iguais. Já segundo \cite{shashua97photometric}, todo quadrado também tem.
 			
-			Veja que o pacote \verb|natbib| permite uma série de formas diferentes para fazer referências bibliográficas. O comando padrão, \verb|\cite|, realiza a citação comum vista no parágrafo anterior. Outros comandos permitem, por exemplo, citar somente o autor --- por exemplo, citar o trabalho de	\citeauthor{samaras99coupled} --- ou colocar automaticamente a citação entre	parênteses \citep{hougen93estimation, sato99illumination2, sato99illumination1, sato01stability}.
+			Veja que o pacote \verb|natbib| permite uma série de formas diferentes para fazer referências bibliográficas. O comando padrão, \verb|\cite|, realiza a citação comum vista no parágrafo anterior. Outros comandos permitem, por exemplo, colocar automaticamente a citação entre	parênteses \citep{hougen93estimation, sato99illumination2, sato99illumination1, sato01stability}.
 			
-			Os comandos usados foram, respectivamente, \verb|\citeauthor| e \verb|\citep|. Veja a documentação do \verb|natbib| na Internet para conhecer	outros comandos e exemplos de uso.
+			O comando usado foi \verb|\citep|. Veja a documentação do \verb|natbib| na Internet para conhecer	outros comandos e exemplos de uso.
 			
 			Citações aleatórias para fazer com que as referências bibliográficas ocupem	mais de uma página: \cite{bichsel92simple, dror01statistics, guisser92new, dwork2006calibrating, sweeney2002k}.
 			

@@ -1,15 +1,41 @@
-%% Identificação da classe
-
+%% Identificação da classe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ppgccufmg}[2022/05/26 Classe Uma classe LaTeX para dissertações, teses e propostas do Programa de Pós-Graduação em Ciência da Computação (PPGCC) da Universidade Federal de Minas Gerais (UFMG).]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Declarações preliminares
+%% DECLARAÇÕES PRELIMINARES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Comandos auxiliares ======================
+\newenvironment{recuoesquerdaoitocm}{	
+	\begin{flushleft} %% Alinha o texto à esquerda
+	\leftskip=5cm %% Adiciona 5cm além da margem esquerda de 3cm, totalizando 8cm
+}{\end{flushleft}}
+%% ==========================================
+
+\newcommand{\removededicatoria}{true}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%  OPÇÕES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareOption{portugues}{\def\idiomapt} %% Define português como sendo o idioma do documento
+\DeclareOption{english}{\def\idiomaen} %% Define inglês como sendo o idioma do documento
+\DeclareOption{msc}{\def\msc} %% Dissertação de mestrado
+\DeclareOption{phd}{\def\phd} %% Tese de doutorado
+\DeclareOption{mscproposta}{\def\mscproposta} %% Proposta de dissertação de mestrado
+\DeclareOption{phdproposta}{\def\phdproposta} %% Proposta de tese de doutorado
+
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{memoir}}
+\ProcessOptions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \LoadClass[a4paper, %% Tipo da folha
-		   12pt, %% Tamanho da fonte
-		   oneside
+	12pt, %% Tamanho da fonte
+	oneside
 ]{memoir}
 
-%% Pacotes ----------------------------------
+%% OUTRAS DECLARAÇÕES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pacotes ==================================
 \RequirePackage[
 	a4paper,
 	left=3cm,
@@ -20,20 +46,12 @@
 \RequirePackage{fancyhdr} %% Usado para colocar a numeração no canto superior direito da página
 \RequirePackage{pdfpages} %% Inclusão de pdfs
 \RequirePackage{tocloft} %% Modificar o sumário, lista de figuras e lista de tabelas
-%% ------------------------------------------
+\RequirePackage{xkeyval} %% Utilizar keys no comando ppgccufmg
+\RequirePackage{xstring} %% Utilizar \IfStrEq
+%% ==========================================
 
+%% Estilos de páginas =======================
 
-%% Comandos auxiliares ----------------------
-\newenvironment{recuoesquerdaoitocm}{	
-	\begin{flushleft} %% Alinha o texto à esquerda
-	\leftskip=5cm %% Adiciona 5cm além da margem esquerda de 3cm, totalizando 8cm
-}{\end{flushleft}}
-%% ------------------------------------------
-
-%% Definições gerais ------------------------
-
-
-%% Estilos de páginas -----------------------
 %% Define o estilo padrão da maioria das páginas do documento. estilopadrao é uma modificação do estilo 'fancy', do pacote fancyhdr
 \fancypagestyle{estilopadrao}[fancydefault]{
 	\fancyhf{} %% Reseta o que tem no header e footer (deixa tudo em branco)
@@ -46,18 +64,6 @@
 	\fancyhf{}
 	\renewcommand{\headrulewidth}{0pt} %% Remove a linha to header
 	\fancyhead[R]{\thepage} %% Coloca a numeração da página no canto direito do header
-	
-}
-
-%% Estilo do resumo e do abstract
-\fancypagestyle{estiloresumoeabstract}[plain]{
-	\fancyhf{} %% Reseta estilo do header e footer
-	\fancyhead[R]{}
-}
-
-%% Estilo do sumário, lista de figuras e lista de tabelas
-\fancypagestyle{estilotocloft}[plain]{
-	\fancyhf{}
 }
 
 %% Estilo da capa
@@ -67,8 +73,61 @@
 	\SingleSpacing %% Define o espaçamento entre linhas para 1cm
 }
 
-%% ------------------------------------------
+%% ==========================================
 
+%% Parâmetros ppgcc =========================
+\define@key{ppgcc}{autor}{\defautor{#1}}
+\define@key{ppgcc}{titulopt}{\deftitulopt{#1}} %% Título em português
+\define@key{ppgcc}{tituloen}{\deftituloen{#1}} %% Título em inglês
+\define@key{ppgcc}{cidade}{\defcidade{#1}}
+\define@key{ppgcc}{ano}{\defano{#1}}
+\define@key{ppgcc}{versaopt}{\defversaopt{#1}} %% Versão do documento em português
+\define@key{ppgcc}{versaoen}{\defversaoen{#1}} %% Versão do documento em português
+\define@key{ppgcc}{orientador}{\deforientador{#1}}
+\define@key{ppgcc}{orientadora}{\deforientadora{#1}}
+\define@key{ppgcc}{coorientador}{\defcoorientador{#1}}
+\define@key{ppgcc}{coorientadora}{\defcoorientadora{#1}}
+\define@key{ppgcc}{palavraschave}{\defpalavraschave{#1}} %% Palavras-chave do resumo em português
+\define@key{ppgcc}{keywords}{\defkeywords{#1}} %% Palavras-chave do abstract em inglês
+\define@key{ppgcc}{epigrafe}{\defepigrafe{#1}} %% Texto do epígrafe
+\define@key{ppgcc}{epigrafeautor}{\defepigrafeautor{#1}} %% Autor do epígrafe
+\define@key{ppgcc}{dedicatoria}{\defdedicatoria{#1}}
+\define@key{ppgcc}{agradecimentos}{\defagradecimentos{#1}}
+
+
+%% Definições dos parâmetros ppgcc
+\newcommand{\defautor}[1]{\def\autor{#1}}
+\newcommand{\deftitulopt}[1]{\def\titulopt{#1}}
+\newcommand{\deftituloen}[1]{\def\tituloen{#1}}
+\newcommand{\defcidade}[1]{\def\cidade{#1}}
+\newcommand{\defano}[1]{\def\ano{#1}}
+\newcommand{\defversaopt}[1]{\def\versaopt{#1}}
+\newcommand{\defversaoen}[1]{\def\versaoen{#1}}
+\newcommand{\deforientador}[1]{\def\orientador{#1}}
+\newcommand{\deforientadora}[1]{\def\orientadora{#1}}
+\newcommand{\defcoorientador}[1]{\def\coorientador{#1}}
+\newcommand{\defcoorientadora}[1]{\def\coorientadora{#1}}
+\newcommand{\defpalavraschave}[1]{\def\palavraschave{#1}}
+\newcommand{\defkeywords}[1]{\def\keywords{#1}}
+\newcommand{\defepigrafe}[1]{\def\epigrafe{#1}}
+\newcommand{\defepigrafeautor}[1]{\def\epigrafeautor{#1}}
+\newcommand{\defdedicatoria}[1]{\def\dedicatoria{#1}}
+\newcommand{\defagradecimentos}[1]{\def\agradecimentos{#1}}
+%% ==========================================
+
+%% Comandos gerais ==========================
+
+%% Comando para resetar o estilo plain (remover tudo do header e footer). Deve ser utilizado para as páginas de capítulos que devem estar sem numração. *** O comando deve ser utilizado dentro de \begingroup\endgroup ***
+\newcommand{\resetaplain}{
+	\fancypagestyle{plain}{
+		\fancyhf{}
+		\renewcommand{\headrulewidth}{0pt} %% Remove a linha to header
+	}
+}
+
+\newcommand{\tocloftpagestyle}[1]{%
+	\def\@cftpagestyle{\thispagestyle{#1}}}
+\tocloftpagestyle{empty}
 
 %% Define o estilo do nome do capítulo no header
 \renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
@@ -84,36 +143,44 @@
 	}
 	
 	\vspace{5cm}
-	
-	Autor
+
+	\autor
 	
 	\vspace{4cm}
 	
-	\textbf{TÍTULO: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.}
+	\textbf{\titulopt}
 	
 	\vfill
 	
-	Cidade\\
-	Ano
+	\cidade\\
+	\ano
 	\clearpage %% Termina a página atual aqui
 	\endgroup
 }
 
-%% Folha de rosto em português
-\newcommand{\folhaderostoportugues}{
+%% Folha de rosto em português ou inglês
+\newcommand{\folhaderosto}[1]{
 	\begingroup
 	\pagestyle{estilocapa}
 	
-	Autor
+	\autor
 	
 	\vspace{6cm}
 	
-	\textbf{TÍTULO: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.}
+	\IfStrEq{#1}{pt}{%
+		\textbf{\titulopt}
+	}{%
+		\textbf{\tituloen}	
+	}
 	
 	\vspace{2cm}
 	
 	\begin{recuoesquerdaoitocm}
-		\textbf{Versão}
+		\IfStrEq{#1}{pt}{%
+			\textbf{Versão} \textbf{\versaopt}
+		}{%
+			\textbf{\versaoen} \textbf{Version}	
+		}
 	\end{recuoesquerdaoitocm}
 
 	\vspace{3cm}
@@ -121,29 +188,87 @@
 	\hbox{ %% Comando utilizado para não ultrapassar a margem a direita
 		\begin{minipage}{\textwidth}
 			\leftskip=5cm
-			Dissertação apresentada ao Programa de Pós-Graduação em Ciência da Computação da Universidade Federal de Minas Gerais, como requisito parcial à obtenção do título de Mestre em Ciência da Computação.
-			%Tese apresentada ao Programa de Pós-Graduação em Ciência da Computação da Universidade Federal de Minas Gerais, como requisito parcial à obtenção do título de Doutor em Ciência da Computação.
-			%Monografia apresentada	como requisito para a conclusão da Graduação em Sistemas de Informação da Universidade Federal de Minas Gerais.
+			
+			%% Dissertações
+			\ifx\msc\undefined\else
+				\IfStrEq{#1}{pt}{%
+					Dissertação apresentada ao Programa de Pós-Graduação em Ciência da Computação da Universidade Federal de Minas Gerais, como requisito parcial à obtenção do título de Mestre em Ciência da Computação.
+				}{%
+					Thesis presented to the Graduate Program in Computer Science of the Federal University of Minas Gerais in partial fulfillment of the requirements for the degree of Master in Computer Science.
+				}
+			\fi
+			
+			%% Tese
+			\ifx\phd\undefined\else
+				\IfStrEq{#1}{pt}{%
+					Tese apresentada ao Programa de Pós-Graduação em Ciência da Computação da Universidade Federal de Minas Gerais, como requisito parcial à obtenção do título de Doutor em Ciência da Computação.
+				}{%
+					Dissertation presented to the Graduate Program in Computer Science of the Federal University of Minas Gerais in partial fulfillment of the requirements for the degree of Doctor in Computer Science.
+				}
+			\fi
+			
+			%% Proposta de dissertação
+			\ifx\mscproposta\undefined\else
+				\IfStrEq{#1}{pt}{%
+					Proposta de dissertação apresentada ao Programa de Pós-Graduação em Ciência da Computação da Universidade Federal de Minas Gerais, como requisito parcial à obtenção do título de Mestre em Ciência da Computação.
+				}{%
+					Thesis proposal presented to the Graduate Program in Computer Science of the Federal University of Minas Gerais in partial fulfillment of the requirements for the degree of Master in Computer Science.
+				}
+			\fi
+			
+			%% Proposta de doutorado
+			\ifx\phdproposta\undefined\else
+				\IfStrEq{#1}{pt}{%
+					Proposta de tese apresentada ao Programa de Pós-Graduação em Ciência da Computação da Universidade Federal de Minas Gerais, como requisito parcial à obtenção do título de Doutor em Ciência da Computação.
+				}{%
+					Dissertation propostal presented to the Graduate Program in Computer Science of the Federal University of Minas Gerais in partial fulfillment of the requirements for the degree of Doctor in Computer Science.
+				}
+			\fi
 		\end{minipage}
 	}
 
 	\vspace{1.5cm}
 
 	\begin{recuoesquerdaoitocm}
-		Orientador: Fulano de tal\\	
-		Coorientador: Fulana de tal
+		\IfStrEq{#1}{pt}{%
+			\ifx\orientador\undefined
+				Orientadora: \orientadora\\
+			\else
+				Orientador: \orientador\\
+			\fi
+		}{%
+			\ifx\orientador\undefined
+				Advisor: \orientadora\\
+			\else
+				Advisor: \orientador\\
+			\fi
+		}
+		
+		\IfStrEq{#1}{pt}{%
+			\ifx\coorientador\undefined
+				\ifx\coorientadora\undefined\else
+					Coorientadora: \coorientadora\\
+				\fi
+			\else
+				Coorientador: \coorientador\\
+			\fi
+		}{%
+			\ifx\coorientador\undefined
+				\ifx\coorientadora\undefined\else
+					Co-Advisor: \coorientadora\\
+				\fi
+			\else
+				Co-Advisor: \coorientador\\
+			\fi
+		}
 	\end{recuoesquerdaoitocm}
 
 	\vfill
 	
-	Cidade\\
-	Ano
+	\cidade\\
+	\ano
 	\clearpage %% Termina a página atual aqui
 	\endgroup
-}
-
-%% Folha de rosto em inglês
-\newcommand{\folhaderostoingles}{
 }
 
 %% Ficha catalográfica. O parâmetro deve ser o nome do arquivo com a extensão .pdf
@@ -157,7 +282,7 @@
 }
 
 %% Dedicatória. O parâmetro deve ser o nome do arquivo com a extensão .tex contendo a dedicatória.
-\newcommand{\dedicatoria}[1]{
+\newcommand{\fazdedicatoria}[1]{
 	\begingroup
 		\pagestyle{empty}
 		\leftskip=5cm % Somado a 3cm da margem esquerda = 8cm
@@ -168,14 +293,21 @@
 }
 
 %% Agradecimentos. O parâmetro deve ser o nome do arquivo com a extensão .tex contendo os agradecimentos.
-\newcommand{\agradecimentos}[1]{
-	\chapter*{Agradecimentos}
-	\input{#1}
-	\clearpage
+\newcommand{\fazagradecimentos}[1]{
+	\begingroup
+		\resetaplain
+		\ifx\idiomapt\undefined
+			\chapter*{Acknowledgments}
+		\else
+			\chapter*{Agradecimentos}
+		\fi
+		\input{#1}
+		\clearpage
+	\endgroup
 }
 
 %% Epígrafe. O primeiro parâmetro é o próprio epígrafe e o segundo parâmetro o autor.
-\newcommand{\epigrafe}[2]{
+\newcommand{\fazepigrafe}[2]{
 	\begingroup
 	\pagestyle{empty}
 	\vspace*{\fill}
@@ -187,27 +319,27 @@
 }
 
 %% Resumo. O primeiro parâmetro deve ser o nome do arquivo com a extensão .tex contendo o resumo, e o segundo parâmetro uma lista com as palavras-chave.
-\newcommand{\resumo}[2]{
+\newcommand{\resumo}[1]{
 	\begingroup
-		\pagestyle{estiloresumoeabstract}
+		\resetaplain
 		\chapter*{Resumo}
 		\input{#1}
 		
 		\vspace{1cm}
-		\noindent\textbf{Palavras-chave:} #2
+		\noindent\textbf{Palavras-chave:} \palavraschave
 		\clearpage
 	\endgroup
 }
 
 %% Abstract. O primeiro parâmetro deve ser o nome do arquivo com a extensão .tex contendo o abstract, e o segundo parâmetro uma lista com as palavras-chave.
-\renewcommand{\abstract}[2]{
+\renewcommand{\abstract}[1]{
 	\begingroup
-		\pagestyle{estiloresumoeabstract}
+		\resetaplain
 		\chapter*{Abstract}
 		\input{#1}
 		
 		\vspace{1cm}
-		\noindent\textbf{Keywords:} #2
+		\noindent\textbf{Keywords:} \keywords
 		\clearpage
 	\endgroup
 }
@@ -217,34 +349,116 @@
 	\appendix
 }{}
 
+
+%% Verifica se todos os parâmetros obrigatórios foram passados
+\newcommand{\verificaobrigatorios}{
+	%% Verifica se o autor(a) foi definido
+	\ifx\autor\undefined
+		\ClassError{ppgccufmg}{Autor(a) não definido.}{Defina o autor(a).}
+	\fi
+	
+	%% Verifica se o título em português foi definido
+	\ifx\titulopt\undefined
+		\ClassError{ppgccufmg}{Título em português não definido.}{Defina o título em português.}
+	\fi
+	
+	%% Verifica se a cidade foi definida
+	\ifx\cidade\undefined
+		\ClassError{ppgccufmg}{Cidade não definida.}{Defina a cidade.}
+	\fi
+	
+	%% Verifica se a cidade foi definida
+	\ifx\ano\undefined
+		\ClassError{ppgccufmg}{Ano não definido.}{Defina o ano.}
+	\fi
+	
+	%% Verifica se a versão em português foi definida
+	\ifx\versaopt\undefined
+		\ClassError{ppgccufmg}{Versão em português não definida.}{Defina a versão em português.}
+	\fi
+	
+	%% Verifica se as palavras-chave em português foram definidas
+	\ifx\palavraschave\undefined
+		\ClassError{ppgccufmg}{Palavras-chave do resumo em português não definidas.}{Defina as palavras-chave.}
+	\fi
+	
+	%% Verifica se as palavras-chave em português foram definidas
+	\ifx\keywords\undefined
+		\ClassError{ppgccufmg}{Palavras-chave do abstract em inglês não definidas.}{Defina as palavras-chave.}
+	\fi
+	
+	%% Se o usuário definiu o idioma como sendo inglês ---------
+	
+	%% Verifica se o título em inglẽs foi passado
+	\ifx\idiomaen\undefined\else
+		\ifx\tituloen\undefined
+			\ClassError{ppgccufmg}{Título em inglês não definido.}{Defina o título em inglês.}
+		\fi
+	\fi
+	
+	%% Verifica se a versão do documento em inglẽs foi passada
+	\ifx\idiomaen\undefined\else
+		\ifx\versaoen\undefined
+			\ClassError{ppgccufmg}{Versão em inglês não definida.}{Defina a versão em inglês.}
+		\fi
+	\fi
+	
+	%% ---------------------------------------------------------
+
+	%% Verificar se algum orientador(a) foi definido
+	\ifx\orientador\undefined
+		\ifx\orientadora\undefined
+			\ClassError{ppgccufmg}{Orientador(a) não definido}{Defina o(a) orientador(a).}
+		\fi
+	\fi
+}
+
 %% Comando principal que desenha todos os elementos pré-textuais (capa, folha de rosto, abstract, ...)
-\newcommand{\ppgccufmg}{%
+\newcommand{\ppgccufmg}[1]{%
+	%% Executa os parâmetros passados pelo usuário
+	\setkeys{ppgcc}{#1}
+	
 	\pagestyle{estilopadrao} %% Define 'estilopadrao' como sendo o estilo 'global' das páginas
 	
-	%% Define o estilo do sumário, lista de figuras e lista de tabelas
-%	\tocloftpagestyle{plain}
-	
+	\verificaobrigatorios
+
 	\maketitle %% Capa
 	
-%	\setcounter{page}{1} %% Comando utilizado para que a capa não conte na numeração das páginas
+	%% Comando utilizado para que a capa não conte na numeração das páginas
+	\cleardoublepage
+	\setcounter{page}{1}
 	
-%	\folhaderostoingles %% Folha de rosto em inglês
+	\folhaderosto{pt} %% Folha de rosto em português
 
-	\folhaderostoportugues %% Folha de rosto em português	
+	\ifx\idiomaen\undefined\else
+		\folhaderosto{en} %% Folha de rosto em inglês
+	\fi
 	
 	\fichacatalografica{fichacatalografica.pdf}
 	
 	\folhadeaprovacao{folhadeaprovacao.pdf}
 	
-	\dedicatoria{dedicatoria.tex}
+	\ifx\dedicatoria\undefined\else
+		\fazdedicatoria{\dedicatoria}
+	\fi
 	
-	\agradecimentos{agradecimentos.tex}
+	\ifx\agradecimentos\undefined\else
+		\fazagradecimentos{\agradecimentos}
+	\fi
 	
-	\epigrafe{Truth and lie are opposite things.}{Unkown}
+	\ifx\epigrafe\undefined\else
+		\ifx\epigrafeautor\undefined
+			\ClassError{ppgccufmg}{Autor do epígrafe não definido}{Defina o autor do epígrafe.}
+		\fi
+		\fazepigrafe{\epigrafe}{\epigrafeautor}
+	\fi
 	
-	\resumo{resumo.tex}{Visão Computacional, Redes, Sabotagens}
+	\resumo{resumo.tex}
 	
-	\abstract{abstract.tex}{Computer Vision, Networks, Sabotage}
+	\abstract{abstract.tex}
+	
+	\begingroup
+	\resetaplain
 	
 	\listoffigures* %% Lista de figuras
 	
@@ -257,11 +471,13 @@
 	%% TODO: Comando para adicionar outros elementos pré-textuais, como por exemplo lista de algoritmos, erratas, ...
 	
 	\begin{KeepFromToc}
-		\tableofcontents %% Sumário
+		\addtocontents{toc}{\protect\thispagestyle{empty}}
+		\tableofcontents* %% Sumário
 	\end{KeepFromToc}
+	\endgroup
 }
 
-%% ------------------------------------------
+%% ==========================================
 
 %% Comandos que serão exercutados logo após o comando \begin{document}
 \AtBeginDocument{
@@ -277,5 +493,5 @@
 	\setaftersubsecskip{1.5cm} %% Espaçamento depois do título da sub-seção
 }
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
