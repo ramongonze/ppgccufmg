@@ -49,8 +49,9 @@ A classe consta com uma lista de parâmetros que modifica os principais elemento
 | ```agradecimentos``` | Arquivo .tex contendo os agradecimentos | Opcional |
 | ```epigrafe``` | Arquivo .tex contendo o epígrafe | Opcional |
 | ```epigrafeautor``` | Nome do(a) autor(a) do epígrafe | Opcional |
+| ```listadefiguras``` | Comando que funciona como uma *flag* que indica se a lista de figuras será gerada ou não. Passe o parâmetro com algum argumento (por exemplo, "sim") para gerar a lista de figuras ou não passe-o caso não queria gerar a lista. | Opcional |
+| ```listadetabelas``` | Comando que funciona como uma *flag* que indica se a lista de tabelas será gerada ou não. Passe o parâmetro com algum argumento (por exemplo, "sim") para gerar a lista de tabelas ou não passe-o caso não queria gerar a lista. | Opcional |
 | ```listascustomizadas``` | Comando para a lista customizada. No arquivo de exemplo há instruções de como criar uma lista customizada | Opcional |
-
 
 ## Outros recursos
 Para adicionar apêncices ao documento, a classe fornece o ambiente ```apendices```. Todos os apêncices devem ser adicionados após a inclusão das referências bibliográficas (comando ```\bibliography```). Todos os apêncies deverão estar dentro dos comandos ```\begin{appendices}``` e ```\end{appendices}```, conforme exemplo abaixo:
