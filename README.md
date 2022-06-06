@@ -1,4 +1,4 @@
-# Classe $\LaTeX$ ppgccufmg
+# Classe LaTeX ppgccufmg
 Uma classe $\LaTeX$ para dissertações, teses e propostas do Programa de Pós-Graduação em Ciência da Computação (PPGCC) da Universidade Federal de Minas Gerais (UFMG). A classe foi feita de modo a atender todas as diretrizes para normalização de trabalhos acadêmicos da UFMG determinadas pelo Reposiório Institucional da UFMG (versão 2020) (arquivo ```Diretrizes - Biblioteca UFMG.pdf```).
 
 A criação desta classe foi inspirada na classe criada por Vilar Fiuza da Camara Neto e Eduardo Freire Nakamura.
