@@ -1,10 +1,10 @@
-# Classe LaTeX ppgccufmg
-Uma classe LaTeX para dissertações, teses e propostas do Programa de Pós-Graduação em Ciência da Computação (PPGCC) da Universidade Federal de Minas Gerais (UFMG). A classe foi feita de modo a atender todas as diretrizes para normalização de trabalhos acadêmicos da UFMG determinadas pelo Reposiório Institucional da UFMG (versão 2020) (arquivo ```Diretrizes - Biblioteca UFMG.pdf```).
+# Classe $\LaTeX$ ppgccufmg
+Uma classe $\LaTeX$ para dissertações, teses e propostas do Programa de Pós-Graduação em Ciência da Computação (PPGCC) da Universidade Federal de Minas Gerais (UFMG). A classe foi feita de modo a atender todas as diretrizes para normalização de trabalhos acadêmicos da UFMG determinadas pelo Reposiório Institucional da UFMG (versão 2020) (arquivo ```Diretrizes - Biblioteca UFMG.pdf```).
 
 A criação desta classe foi inspirada na classe criada por Vilar Fiuza da Camara Neto e Eduardo Freire Nakamura.
 
 # Como utilizar a classe
-Recomenda-se fazer uma cópia da pasta ```exemplo``` e realizar as modificações necessárias. Entretando, caso o usuário prefira criar um novo documento vazio e queria utilizar a classe, o arquivo ```ppgccufmg.cls``` deve ser copiado para o mesmo diretório que o arquivo ```.tex``` principal.
+Para utilizar os recursos da classe, o arquivo ```pgccufmg.cls``` deve estar no mesmo diretório que o arquivo ```.tex``` principal. Há um exemplo de utilização da classe no diretório ```exemplo``` deste repositório. A classe foi testada tanto com o [TeXstudio](https://www.texstudio.org/) para compilações locais tanto com o [Overleaf](https://overleaf.com/).
 
 ## Opções da classe
  Para se utilizar a classe, deve-se declarar o tipo do documento com o comando
