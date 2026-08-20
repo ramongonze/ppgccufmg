@@ -1,7 +1,3 @@
-%%
-%% Copyright (C) 2022 by Ramon Gonçalves Gonze
-%%
-
 %% Identificação da classe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ppgccufmg}[2022/05/26 Classe Uma classe LaTeX para dissertações, teses e propostas do Programa de Pós-Graduação em Ciência da Computação (PPGCC) da Universidade Federal de Minas Gerais (UFMG).]
@@ -20,12 +16,30 @@
 
 
 %%  OPÇÕES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\DeclareOption{portugues}{\def\idiomapt} %% Define português como sendo o idioma do documento
-\DeclareOption{english}{\def\idiomaen} %% Define inglês como sendo o idioma do documento
-\DeclareOption{msc}{\def\msc} %% Dissertação de mestrado
-\DeclareOption{phd}{\def\phd} %% Tese de doutorado
-\DeclareOption{mscproposta}{\def\mscproposta} %% Proposta de dissertação de mestrado
-\DeclareOption{phdproposta}{\def\phdproposta} %% Proposta de tese de doutorado
+%% Obs.: os corpos dos \DeclareOption abaixo usam \def\algumaflag{} (com
+%% chaves vazias), e não \def\algumaflag sozinho. Sem as chaves, \def fica
+%% incompleto e, ao ser executado dentro de \ProcessOptions, "rouba" os
+%% tokens seguintes do fluxo de processamento das opções à procura de um
+%% corpo -- o que corrompe o processamento de qualquer opção declarada
+%% depois dela na mesma compilação (bug real encontrado ao testar as novas
+%% opções de PDF/A abaixo, que só se manifestava quando havia opções
+%% suficientes em uso simultaneamente).
+\DeclareOption{portugues}{\def\idiomapt{}} %% Define português como sendo o idioma do documento
+\DeclareOption{english}{\def\idiomaen{}} %% Define inglês como sendo o idioma do documento
+\DeclareOption{msc}{\def\msc{}} %% Dissertação de mestrado
+\DeclareOption{phd}{\def\phd{}} %% Tese de doutorado
+\DeclareOption{mscproposta}{\def\mscproposta{}} %% Proposta de dissertação de mestrado
+\DeclareOption{phdproposta}{\def\phdproposta{}} %% Proposta de tese de doutorado
+
+%% Nível de conformidade PDF/A exigido pelo RI-UFMG (padrão: a-2b) =========
+\newif\ifppgccufmgpdfa
+\ppgccufmgpdfatrue
+\def\ppgccufmgpdfalevel{a-2b}
+\DeclareOption{pdfa1b}{\def\ppgccufmgpdfalevel{a-1b}}
+\DeclareOption{pdfa2b}{\def\ppgccufmgpdfalevel{a-2b}}
+\DeclareOption{pdfa3b}{\def\ppgccufmgpdfalevel{a-3b}}
+\DeclareOption{semvalidacaopdfa}{\ppgccufmgpdfafalse} %% Desliga a geração de PDF/A (ex.: rascunhos)
+%% ==========================================================================
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{memoir}}
 \ProcessOptions
@@ -37,7 +51,23 @@
 ]{memoir}
 
 %% OUTRAS DECLARAÇÕES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Geração de PDF/A =========================
+%% pdfx precisa ser o primeiro pacote carregado no documento (antes de
+%% hyperref e de qualquer outro pacote), por isso vem logo após o \LoadClass.
+%% Ele carrega o hyperref internamente já configurado para PDF/A: não
+%% carregue o hyperref novamente no seu .tex, use \hypersetup{} (veja README).
+\ifppgccufmgpdfa
+	\RequirePackage[\ppgccufmgpdfalevel]{pdfx}
+\else
+	%% Com a opção semvalidacaopdfa o pdfx não é carregado, mas o hyperref
+	%% ainda é necessário (para \hypersetup{} funcionar, links, sumário, etc.)
+	\RequirePackage{hyperref}
+\fi
+%% ==========================================
+
 %% Pacotes ==================================
+\RequirePackage[T1]{fontenc} %% Garante fontes com acentuação incorporável (necessário para PDF/A)
+\RequirePackage{lmodern} %% Fontes Latin Modern vetoriais (evita fallback bitmap)
 \RequirePackage[
 	a4paper,
 	left=3cm,
@@ -78,12 +108,10 @@
 
 %% Parâmetros ppgcc =========================
 \define@key{ppgcc}{autor}{\defautor{#1}}
-\define@key{ppgcc}{titulopt}{\deftitulopt{#1}} %% Título em português
-\define@key{ppgcc}{tituloen}{\deftituloen{#1}} %% Título em inglês
+\define@key{ppgcc}{titulo}{\deftitulo{#1}} %% Título
 \define@key{ppgcc}{cidade}{\defcidade{#1}}
 \define@key{ppgcc}{ano}{\defano{#1}}
-\define@key{ppgcc}{versaopt}{\defversaopt{#1}} %% Versão do documento em português
-\define@key{ppgcc}{versaoen}{\defversaoen{#1}} %% Versão do documento em português
+\define@key{ppgcc}{versao}{\defversao{#1}} %% Versão do documento
 \define@key{ppgcc}{orientador}{\deforientador{#1}}
 \define@key{ppgcc}{orientadora}{\deforientadora{#1}}
 \define@key{ppgcc}{coorientador}{\defcoorientador{#1}}
@@ -102,15 +130,15 @@
 \define@key{ppgcc}{listadetabelas}{\deflistadetabelas{#1}} %% Flag que decide se adiciona ou não a lista de tabelas no documento
 \define@key{ppgcc}{listascustomizadas}{\deflistascustomizadas{#1}}
 
+%% Adiciona a palavra "Appendix" (ou "Apêndice") no sumário antes de "A", "B", ...
+\renewcommand\cftappendixname{\appendixname~}
 
 %% Definições dos parâmetros ppgcc
 \newcommand{\defautor}[1]{\def\autor{#1}}
-\newcommand{\deftitulopt}[1]{\def\titulopt{#1}}
-\newcommand{\deftituloen}[1]{\def\tituloen{#1}}
+\newcommand{\deftitulo}[1]{\def\titulo{#1}}
 \newcommand{\defcidade}[1]{\def\cidade{#1}}
 \newcommand{\defano}[1]{\def\ano{#1}}
-\newcommand{\defversaopt}[1]{\def\versaopt{#1}}
-\newcommand{\defversaoen}[1]{\def\versaoen{#1}}
+\newcommand{\defversao}[1]{\def\versao{#1}}
 \newcommand{\deforientador}[1]{\def\orientador{#1}}
 \newcommand{\deforientadora}[1]{\def\orientadora{#1}}
 \newcommand{\defcoorientador}[1]{\def\coorientador{#1}}
@@ -129,6 +157,7 @@
 \newcommand{\deflistadetabelas}[1]{\def\listadetabelas{#1}}
 \newcommand{\deflistascustomizadas}[1]{\def\listascustomizadas{#1}}
 %% ==========================================
+
 
 %% Comandos gerais ==========================
 
@@ -160,9 +189,9 @@
 	\autor
 	
 	\vspace{4cm}
-	
-	\textbf{\titulopt}
-	
+
+	\textbf{\titulo}
+		
 	\vfill
 	
 	\cidade\\
@@ -180,19 +209,15 @@
 	
 	\vspace{6cm}
 	
-	\IfStrEq{#1}{pt}{%
-		\textbf{\titulopt}
-	}{%
-		\textbf{\tituloen}	
-	}
-	
+	\textbf{\titulo}
+		
 	\vspace{2cm}
 	
 	\begin{recuoesquerdaoitocm}
 		\IfStrEq{#1}{pt}{%
-			\textbf{Versão} \textbf{\versaopt}
+			\textbf{Versão} \textbf{\versao}
 		}{%
-			\textbf{\versaoen} \textbf{Version}	
+			\textbf{\versao} \textbf{Version}	
 		}
 	\end{recuoesquerdaoitocm}
 
@@ -234,7 +259,7 @@
 				\IfStrEq{#1}{pt}{%
 					Proposta de tese apresentada ao Programa de Pós-Graduação em Ciência da Computação da Universidade Federal de Minas Gerais, como requisito parcial à obtenção do título de Doutor em Ciência da Computação.
 				}{%
-					Dissertation propostal presented to the Graduate Program in Computer Science of the Federal University of Minas Gerais in partial fulfillment of the requirements for the degree of Doctor in Computer Science.
+					Dissertation proposal presented to the Graduate Program in Computer Science of the Federal University of Minas Gerais in partial fulfillment of the requirements for the degree of Doctor in Computer Science.
 				}
 			\fi
 		\end{minipage}
@@ -309,6 +334,7 @@
 \newcommand{\fazagradecimentos}[1]{
 	\begingroup
 		\resetaplain
+		\pagestyle{plain}
 		\ifx\idiomapt\undefined
 			\chapter*{Acknowledgments}
 		\else
@@ -335,6 +361,7 @@
 \newcommand{\fazresumo}[1]{
 	\begingroup
 		\resetaplain
+		\pagestyle{plain}
 		\chapter*{Resumo}
 		\input{#1}
 		
@@ -348,6 +375,7 @@
 \newcommand{\fazabstracten}[1]{
 	\begingroup
 		\resetaplain
+		\pagestyle{plain}
 		\chapter*{Abstract}
 		\input{#1}
 		
@@ -362,6 +390,31 @@
 	\appendix
 }{}
 
+%% Geração automática dos metadados XMP exigidos pelo pdfx (PDF/A) =========
+%% O pdfx lê o arquivo \jobname.xmpdata no início da compilação (ao carregar
+%% o pacote), ou seja, ANTES deste comando executar (que roda dentro de
+%% \ppgccufmg{}, após \begin{document}). Por isso os metadados escritos aqui
+%% só são de fato incorporados ao PDF a partir da 2ª compilação em diante —
+%% mesmo comportamento de sumário/referências, que também exigem recompilar.
+\newwrite\ppgccufmgxmpfile
+\newcommand{\ppgccufmggerarxmpdata}{
+	\ifppgccufmgpdfa
+		\immediate\openout\ppgccufmgxmpfile=\jobname.xmpdata
+		\immediate\write\ppgccufmgxmpfile{\string\Title{\titulo}}
+		\immediate\write\ppgccufmgxmpfile{\string\Author{\autor}}
+		\ifx\idiomapt\undefined
+			\immediate\write\ppgccufmgxmpfile{\string\Language{en-US}}
+			\immediate\write\ppgccufmgxmpfile{\string\Keywords{\keywords}}
+		\else
+			\immediate\write\ppgccufmgxmpfile{\string\Language{pt-BR}}
+			\immediate\write\ppgccufmgxmpfile{\string\Keywords{\palavraschave}}
+		\fi
+		\immediate\write\ppgccufmgxmpfile{\string\Publisher{Universidade Federal de Minas Gerais}}
+		\immediate\closeout\ppgccufmgxmpfile
+	\fi
+}
+%% ==========================================================================
+
 %% Verifica se todos os parâmetros obrigatórios foram passados
 \newcommand{\verificaobrigatorios}{
 	%% Verifica se o autor(a) foi definido
@@ -369,9 +422,9 @@
 		\ClassError{ppgccufmg}{Autor(a) não definido}{Defina o autor(a)}
 	\fi
 	
-	%% Verifica se o título em português foi definido
-	\ifx\titulopt\undefined
-		\ClassError{ppgccufmg}{Título em português não definido}{Defina o título em português}
+	%% Verifica se o título foi definido
+	\ifx\titulo\undefined
+		\ClassError{ppgccufmg}{Título não definido}{Defina o título}
 	\fi
 	
 	%% Verifica se a cidade foi definida
@@ -384,9 +437,9 @@
 		\ClassError{ppgccufmg}{Ano não definido}{Defina o ano}
 	\fi
 	
-	%% Verifica se a versão em português foi definida
-	\ifx\versaopt\undefined
-		\ClassError{ppgccufmg}{Versão em português não definida}{Defina a versão em português}
+	%% Verifica se a versão do documento foi definida
+	\ifx\versao\undefined
+		\ClassError{ppgccufmg}{Versão não definida}{Defina a versão}
 	\fi
 	
 	%% Verifica se o resumo em português foi passado
@@ -409,22 +462,6 @@
 		\ClassError{ppgccufmg}{Palavras-chave do abstract em inglês não definidas}{Defina as palavras-chave}
 	\fi
 	
-	%% Se o usuário definiu o idioma como sendo inglês ---------
-	
-	%% Verifica se o título em inglẽs foi passado
-	\ifx\idiomaen\undefined\else
-		\ifx\tituloen\undefined
-			\ClassError{ppgccufmg}{Título em inglês não definido}{Defina o título em inglês}
-		\fi
-	\fi
-	
-	%% Verifica se a versão do documento em inglẽs foi passada
-	\ifx\idiomaen\undefined\else
-		\ifx\versaoen\undefined
-			\ClassError{ppgccufmg}{Versão em inglês não definida}{Defina a versão em inglês}
-		\fi
-	\fi
-	
 	%% ---------------------------------------------------------
 
 	%% Verificar se algum orientador(a) foi definido
@@ -442,20 +479,22 @@
 	\setkeys{ppgcc}{#1}
 	
 	\pagestyle{estilopadrao} %% Define 'estilopadrao' como sendo o estilo 'global' das páginas
-	
+
 	\verificaobrigatorios
+
+	\ppgccufmggerarxmpdata %% Gera/atualiza o .xmpdata com os metadados PDF/A (ver observação acima)
 
 	\maketitle %% Capa
 	
 	%% Comando utilizado para que a capa não conte na numeração das páginas
 	\cleardoublepage
 	\setcounter{page}{1}
-	
-	\folhaderosto{pt} %% Folha de rosto em português
 
-	\ifx\idiomaen\undefined\else
+	\ifx\idiomaen\undefined
+		\folhaderosto{pt} %% Folha de rosto em português
+	\else
 		\folhaderosto{en} %% Folha de rosto em inglês
-	\fi
+	\fi	
 	
 	\ifx\fichacatalografica\undefined\else
 		\fazfichacatalografica{\fichacatalografica}
@@ -488,26 +527,31 @@
 	\resetaplain
 	
 	\ifx\listadefiguras\undefined\else
-		\listoffigures* %% Lista de figuras
-		\clearpage
+		\begingroup
+			\pagestyle{empty}
+			\listoffigures* %% Lista de figuras
+			\clearpage
+		\endgroup
 	\fi
 	
 	\ifx\listadetabelas\undefined\else
-		\listoftables* %% Lista de tabelas
-		\clearpage
+		\begingroup
+			\pagestyle{empty}
+			\listoftables* %% Lista de tabelas
+			\clearpage
+		\endgroup
 	\fi
-	
-	\ifx\listascustomizadas\undefined\else
-		\listascustomizadas*
-	\fi
-	
-	\clearpage
-	
-	%% TODO: Comando para adicionar outros elementos pré-textuais, como por exemplo lista de algoritmos, erratas, ...
 	
 	\begin{KeepFromToc}
 		\addtocontents{toc}{\protect\thispagestyle{empty}}
+		\pagestyle{empty}
+		\ifx\listascustomizadas\undefined\else
+			\listascustomizadas
+			\clearpage
+		\fi		
 		\tableofcontents* %% Sumário
+		\cleardoublepage
+		\pagestyle{headings}
 	\end{KeepFromToc}
 	\endgroup
 }
@@ -517,7 +561,7 @@
 %% Comandos que serão exercutados logo após o comando \begin{document}
 \AtBeginDocument{
 	
-	\setsecnumdepth{subsection} %% Define a profundidade das seções (permite capítulo, seção e sub-seção)
+	\setsecnumdepth{subsubsection} %% Define a profundidade das seções (permite capítulo, seção, sub-seção e sub-sub-seção)
 	\OnehalfSpacing %% Espaçamento de 1,5cm entre linhas
 	\setlength{\parindent}{1.25cm} %% Recuo de 1,25 cm à esquerda em parágrafos
 	\setheadfoot{\baselineskip}{1.5cm} %% Define o tamanho do header e o espaço entre o header e o texto
@@ -527,6 +571,9 @@
 	\setaftersecskip{1.5cm} %% Espaçamento depois do título da seção
 	\setbeforesubsecskip{1.5cm} %% Espaçamento antes do título da sub-seção
 	\setaftersubsecskip{1.5cm} %% Espaçamento depois do título da sub-seção
+	\setbeforesubsubsecskip{1.5cm} %% Espaçamento antes do título da sub-sub-seção
+	\setaftersubsubsecskip{1.5cm} %% Espaçamento depois do título da sub-sub-seção
+	\setcounter{tocdepth}{3} %% Profundidade dos elementos do sumário. 3 = sub-sub-seção
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
